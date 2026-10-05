@@ -1,0 +1,12 @@
+/* slide 03: two waves draw themselves; click 1 brings the bars */
+.s03 .split>.words{flex:0 0 430px}
+.s03 .s03-waves{display:block;width:100%;margin-top:34px;overflow:visible}
+.s03 .s03-waves text{font:600 14px var(--sans);fill:var(--muted)}
+.s03 .chart{max-width:600px}
+.s03 .bar .bt{height:40px}
+.s03 .bar .bf{font-size:16px}
+.s03 .s03-red .bf{background:#D9352B}
+.s03 .s03-red .bf.out{color:var(--soft)}
+.s03 .s03-tag{margin-top:22px;font-size:15px;color:var(--muted)}
+.s03 .s03-tag .tag{margin-right:8px}
+.s03 .bar:not(.s03-red) .bf{background:#2E6CC9}

@@ -1,0 +1,142 @@
+/* ═══════════════════════════════════════════════════════════════
+   LECTURE KIT · the house pieces every lecture deck shares.
+   build.py puts this after the engine and the theme, before the slides' own CSS.
+   It only adds; it never changes the engine.
+
+     1  topic strip along the TOP (from data-topic on each section)
+     2  sources: one line, the whole source on hover
+     3  tags: who is speaking (text alone in an oval, never a dot)
+     4  click reveals placed straight in a slide wait for their click
+     5  .grp: one click shows a whole group, staggered
+     6  past steps shrink (data-shrink-at), replace in place (data-out)
+     7  .frame + .caption for real pictures
+     8  numbers in proportion to the heading
+   ═══════════════════════════════════════════════════════════════ */
+:root{
+  --ours:var(--warm);            /* "our addition / our calculation": the second voice */
+  --ours-soft:var(--warm-soft);
+  --mine:var(--accent);          /* "my experience" */
+  --mine-soft:var(--accent-soft);
+  --ok:#0F8A5F;
+  --ok-soft:#E7F6EF;
+}
+
+/* 1 · topic strip along the top ─────────────────────────────────
+   Built by lecture-kit.js from data-topic="Light" on each section, in deck order.
+   Past topics quiet grey, the current one in the accent with a line under it, the
+   ones still to come faint. Text only: no dots, no pills. Slides without data-topic
+   (title, close) hide it. The bottom of a slide keeps only the source and the page number. */
+#topics{position:absolute;left:76px;right:76px;top:26px;z-index:6;display:flex;gap:22px;
+  pointer-events:none;opacity:0;transition:opacity .45s var(--e)}
+#topics.on{opacity:1}
+#topics b{position:relative;flex:none;white-space:nowrap;padding:0 0 7px;
+  font:700 10.5px/1 var(--disp);letter-spacing:.12em;text-transform:uppercase;color:#C3CAD6;
+  transition:color .45s var(--e)}
+#topics b::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;border-radius:2px;
+  background:transparent;transition:background .45s var(--e)}
+#topics b.past{color:#8894A8}
+#topics b.past::after{background:#C9D0DB}
+#topics b.now{color:var(--accent)}
+#topics b.now::after{background:var(--accent)}
+#deck.on-dark #topics b{color:#3A4560}
+#deck.on-dark #topics b.past{color:#6E7C97}
+#deck.on-dark #topics b.past::after{background:#3A4560}
+#deck.on-dark #topics b.now{color:color-mix(in srgb,var(--accent) 42%,#fff)}
+#deck.on-dark #topics b.now::after{background:color-mix(in srgb,var(--accent) 42%,#fff)}
+.slide[data-topic]{padding-top:86px}
+
+/* 2 · sources: one line, the whole source on hover ───────────── */
+.slide .cite{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  max-height:1.45em;max-height:1lh;width:fit-content;
+  max-width:calc(100% - 196px);max-width:-webkit-fill-available;max-width:stretch;
+  margin-left:0;margin-right:auto}
+.slide.center .cite{left:120px;right:120px;margin-left:auto;margin-right:auto;
+  max-width:calc(100% - 240px);max-width:-webkit-fill-available;max-width:stretch}
+.slide.right .cite{margin-left:auto;margin-right:0}
+.slide .cite:hover,.slide .cite:focus-within{white-space:normal;overflow:visible;
+  text-overflow:clip;max-height:none;z-index:60;color:var(--muted);
+  animation:lmCite .16s var(--e) both}
+.slide .cite:hover::before,.slide .cite:focus-within::before{content:"";position:absolute;
+  inset:-9px -14px;z-index:-1;pointer-events:none;background:var(--paper);
+  border:1px solid var(--hair);border-radius:12px;
+  box-shadow:0 2px 6px rgba(13,18,32,.06),0 18px 44px rgba(13,18,32,.18)}
+.slide .cite:hover a,.slide .cite:focus-within a{color:var(--soft);border-bottom-color:#C4CCDA}
+.slide .cite:hover a:hover,.slide .cite a:focus-visible{color:var(--accent);border-bottom-color:var(--accent);outline:none}
+.dark .cite:hover,.dark .cite:focus-within{color:#AEB9CC}
+.dark .cite:hover::before,.dark .cite:focus-within::before{background:#151C2B;
+  border-color:#2A3450;box-shadow:0 2px 6px rgba(0,0,0,.3),0 18px 48px rgba(0,0,0,.55)}
+.dark .cite:hover a,.dark .cite:focus-within a{color:#DDE3ED;border-bottom-color:#4A5672}
+.dark .cite:hover a:hover,.dark .cite a:focus-visible{color:color-mix(in srgb,var(--accent) 42%,#fff);
+  border-bottom-color:color-mix(in srgb,var(--accent) 42%,#fff)}
+@keyframes lmCite{from{opacity:.35;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* 3 · tags: who is speaking ──────────────────────────────────────
+   <span class="tag ours">our calculation</span> · <span class="tag mine">my experience</span>
+   <span class="tag self">their own test</span> · <span class="tag">estimate</span> · <span class="tag plan">Pro and up</span>
+   Text alone in the oval. Never a dot beside the words. */
+.tag{display:inline-block;padding:5px 11px 4px;border-radius:99px;white-space:nowrap;vertical-align:middle;
+  font:700 10.5px/1.2 var(--disp);letter-spacing:.14em;text-transform:uppercase;
+  background:var(--tint);color:var(--muted)}
+.tag.ours{background:var(--ours-soft);color:var(--ours);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ours) 28%,transparent)}
+.tag.mine{background:var(--mine-soft);color:var(--mine);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--mine) 24%,transparent)}
+.tag.self{background:#F1F3F7;color:var(--soft);box-shadow:inset 0 0 0 1px var(--hair)}
+.tag.plan{background:var(--paper);color:var(--soft);box-shadow:inset 0 0 0 1px var(--hair)}
+.dark .tag{background:#1B2438;color:#A7B4CB}
+.dark .tag.ours{background:color-mix(in srgb,var(--warm) 18%,transparent);color:color-mix(in srgb,var(--warm) 45%,#fff)}
+.dark .tag.mine{background:color-mix(in srgb,var(--accent) 22%,transparent);color:color-mix(in srgb,var(--accent) 45%,#fff)}
+
+/* 4 · a reveal sitting straight in a slide waits for its click ──
+   (the engine's entrance cascade would otherwise show it at once) */
+.slide.on > .r:not(.pnum):not(.cite),
+.slide.on > .rise:not(.pnum):not(.cite),
+.slide.on > .grow:not(.pnum):not(.cite),
+.slide.on > .side:not(.pnum):not(.cite),
+.slide.on > .grp:not(.pnum):not(.cite),
+.slide.on > .shrunk:not(.pnum):not(.cite),
+.slide.on > .lm-out:not(.pnum):not(.cite){animation:none}
+
+/* 5 · .grp: data-step on the group, not on its items ─────────────
+   One click and every child fades up in its reserved place, ~90 ms apart. */
+.grp > *{opacity:0;transform:translateY(14px);
+  transition:opacity .5s var(--e),transform .55s var(--e)}
+.grp.show > *{opacity:1;transform:none}
+.grp.show > :nth-child(2){transition-delay:.09s}
+.grp.show > :nth-child(3){transition-delay:.18s}
+.grp.show > :nth-child(4){transition-delay:.27s}
+.grp.show > :nth-child(5){transition-delay:.36s}
+.grp.show > :nth-child(n+6){transition-delay:.45s}
+
+/* 6 · past steps shrink, replace in place ────────────────────────
+   data-shrink-at="2"  → .shrunk from beat 2 on (set --shrink, --origin, --sx, --sy on it)
+   data-out="2"        → .lm-out, fades away in place from beat 2 on (keeps its space)
+   data-gone="2"       → .lm-out too, and it can no longer be clicked or hovered
+   If the last beat of a slide is only a shrink or an out, add <i data-step="N" hidden></i>
+   so the engine gives it a click. Never put a state transform on a direct child of the
+   section: wrap it. */
+[data-shrink-at]{transform-origin:var(--origin,top left);
+  transition:transform .7s var(--e),opacity .5s var(--e)}
+[data-shrink-at].shrunk{transform:translate(var(--sx,0px),var(--sy,0px)) scale(var(--shrink,.55))}
+[data-out],[data-gone]{transition:opacity .45s var(--e),transform .55s var(--e)}
+.lm-out{opacity:0!important;transform:translateY(-10px);pointer-events:none}
+
+/* 7 · a real picture in a frame, and its caption ─────────────────── */
+.frame{position:relative;margin:0;background:var(--paper);border:1px solid var(--hair);border-radius:14px;
+  overflow:hidden;box-shadow:var(--lift2)}
+.frame img,.frame video{display:block;width:100%;height:100%;object-fit:cover}
+.frame.contain img{object-fit:contain;background:var(--paper)}
+.frame.bare{border:0;box-shadow:none;background:transparent}
+.caption{margin-top:10px;font-size:13px;line-height:1.45;color:var(--faint)}
+.caption b{color:var(--soft);font-weight:600}
+.dark .frame{border-color:#26304A;background:#0F1626}
+.dark .caption{color:#7E8BA5}
+
+/* 8 · numbers in proportion: a data number ~1.5x the heading, not 2.5x */
+.stat b{font-size:66px}
+.duo .stat b{font-size:60px}
+
+/* 9 · a bar too short for its label: class="bf out" puts the label just past the end of the bar.
+   (The engine's own rule widens a short bar to the whole track, so the kit replaces it.)
+   If you change the bar height, set --bh on the .bars to the same value (default 28px). */
+.bar .bf.out{display:block;overflow:visible;padding:0;white-space:nowrap;
+  line-height:var(--bh,28px);text-indent:calc(100% + 11px);color:var(--soft)}
+.dark .bar .bf.out{color:#D5DEEC}

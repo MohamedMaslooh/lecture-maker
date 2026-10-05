@@ -1,0 +1,73 @@
+/* Slide navigator (see deck-nav.js; from Lecture 4's css/00-nav.css). Same look as the lecture site's deck-nav; light palette = blue, dark = cyan,
+   and by default deck-nav.js swaps in the deck's own --accent and --sans. Hidden until the pointer reaches the right
+   edge (.peek) or G opens it (.open). --nres on <html> = a right-hand column to keep clear of (unused here). */
+.dnav{
+  --n-accent:#1A61D8; --n-ink:#0D2766; --n-muted:#5E6A88; --n-bg:#F7F9FD; --n-line:#D5DDEE; --n-tick:rgba(13,39,102,.34);
+  --n-pill:rgba(255,255,255,.72); --n-hover:#E6EEFF; --n-shadow:0 18px 50px rgba(13,39,102,.28);
+  --n-font:"Inter",system-ui,"Segoe UI",Arial,sans-serif;
+  --pw:260px; --safe-r:env(safe-area-inset-right,0px); --edge:var(--nres,0px);
+  font-family:var(--n-font);
+}
+.dnav[data-theme="dark"]{
+  --n-accent:#7FD3E6; --n-ink:#F2F2EE; --n-muted:#A4ABB3; --n-bg:#16191C; --n-line:#2A2F35; --n-tick:rgba(164,171,179,.62);
+  --n-pill:rgba(17,19,21,.82); --n-hover:#22272C; --n-shadow:0 18px 50px rgba(0,0,0,.5);
+}
+@media (hover:none) and (min-width:700px){ .dnav{--pw:300px} }
+
+/* the handle: a ladder of ticks, one per slide, at the right edge. Invisible and click-through until .peek */
+.dnav-h{position:fixed;right:var(--edge);top:50%;transform:translate(6px,-50%);z-index:60;display:flex;flex-direction:column;align-items:flex-end;gap:var(--g,4px);
+  padding:12px calc(4px + var(--safe-r)) 12px 4px;margin:0;border:0;border-radius:9px 0 0 9px;background:var(--n-pill);cursor:pointer;
+  box-shadow:0 2px 10px rgba(13,39,102,.12);
+  opacity:0;pointer-events:none;transition:opacity .22s,transform .22s,background .25s;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.dnav.peek .dnav-h,.dnav.open .dnav-h{opacity:1;pointer-events:auto;transform:translate(0,-50%)}
+.dnav-h::before{content:"";position:absolute;left:-14px;top:-6px;bottom:-6px;width:14px}   /* a wider target than the ticks */
+.dnav-h i{display:block;width:8px;height:2px;border-radius:2px;background:var(--n-tick);transition:width .25s,background .25s}
+.dnav-h i.on{width:14px;height:3px;margin:-.5px 0;background:var(--n-accent)}
+.dnav-h:focus-visible{outline:2px solid var(--n-accent);outline-offset:2px}
+
+/* the panel */
+.dnav-p{--k:.164;position:fixed;right:var(--edge);top:0;bottom:0;width:var(--pw);max-width:calc(100vw - 36px);z-index:70;display:flex;flex-direction:column;
+  background:var(--n-bg);color:var(--n-ink);border-left:1px solid var(--n-line);box-shadow:var(--n-shadow);
+  padding-right:var(--safe-r);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  transform:translateX(calc(104% + var(--edge)));visibility:hidden;transition:transform .32s cubic-bezier(.2,.9,.25,1),visibility 0s linear .32s}
+.dnav.open .dnav-p{transform:none;visibility:visible;transition:transform .32s cubic-bezier(.2,.9,.25,1),visibility 0s}
+.dnav-hd{display:flex;align-items:baseline;gap:8px;padding:14px 12px 10px 16px;border-bottom:1px solid var(--n-line);flex:none}
+.dnav-hd b{font:700 15px/1.2 var(--n-font);letter-spacing:.01em}
+.dnav-ct{font:500 13px/1 var(--n-font);color:var(--n-muted)}
+.dnav-ky{align-self:center;margin-left:auto;font:600 11px/1 var(--n-font);color:var(--n-muted);padding:3px 6px;border:1px solid var(--n-line);border-radius:4px}
+.dnav-x{align-self:center;width:30px;height:30px;display:grid;place-items:center;border:0;border-radius:8px;background:none;color:var(--n-muted);cursor:pointer;padding:0}
+.dnav-x:hover{background:var(--n-hover);color:var(--n-ink)}
+.dnav-x svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+@media (hover:none){ .dnav-x{width:40px;height:40px} .dnav-ky{display:none} .dnav-x{margin-left:auto} }
+.dnav-l{flex:1;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;padding:10px 12px 18px 6px;
+  scrollbar-width:thin;scrollbar-color:var(--n-line) transparent}
+.dnav-i{display:flex;align-items:flex-start;gap:6px;padding:5px 0;cursor:pointer;border-radius:8px;-webkit-tap-highlight-color:transparent}
+.dnav-n{flex:none;width:24px;padding-top:2px;text-align:right;font:500 12px/1 var(--n-font);color:var(--n-muted);font-variant-numeric:tabular-nums}
+.dnav-i.on .dnav-n{color:var(--n-accent);font-weight:700}
+.dnav-th{position:relative;flex:1;min-width:0;aspect-ratio:16/9;overflow:hidden;border-radius:5px;background:var(--n-hover);
+  box-shadow:0 0 0 1px var(--n-line);transition:box-shadow .15s}
+.dnav-i:hover .dnav-th,.dnav-i.sel .dnav-th{box-shadow:0 0 0 2px color-mix(in srgb,var(--n-accent) 55%,transparent)}
+.dnav-i.on .dnav-th{box-shadow:0 0 0 2.5px var(--n-accent)}
+
+/* a real thumbnail (window.DNAV.thumbs) */
+.dnav-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;user-select:none}
+
+/* or a live mini copy: the 1280 x 720 board scaled down. Nothing in it moves, and every beat is shown. */
+.dnav-fr{position:absolute;left:0;top:0;width:1280px;height:720px;overflow:hidden;transform-origin:0 0;transform:scale(var(--k));pointer-events:none;
+  background:var(--page,#fff);font-family:var(--sans,sans-serif);-webkit-font-smoothing:antialiased;user-select:none}
+.dnav-fr *,.dnav-fr *::before,.dnav-fr *::after{animation:none!important;transition:none!important}
+.dnav-fr .slide{position:absolute;inset:0;opacity:1!important;transform:none!important;pointer-events:none}
+.dnav-fr .pnum{opacity:1}
+
+/* the large preview, beside the panel (desktop): the hover enlarge */
+.dnav-pv{position:fixed;z-index:69;aspect-ratio:16/9;border-radius:10px;overflow:hidden;background:var(--n-bg);box-shadow:var(--n-shadow),0 0 0 1px var(--n-line);
+  opacity:0;visibility:hidden;transform:translateX(10px);transition:opacity .16s,transform .2s,visibility 0s linear .2s;pointer-events:none}
+.dnav-pv.vis{opacity:1;visibility:visible;transform:none;transition:opacity .16s,transform .2s,visibility 0s}
+.dnav-fr-box{position:absolute;inset:0;overflow:hidden}
+.dnav-fr-box .dnav-fr{transform:scale(var(--pk,.375))}
+.dnav-pn{position:absolute;left:8px;bottom:8px;padding:3px 8px;border-radius:99px;background:rgba(10,14,20,.72);color:#fff;font:500 12px/1.3 var(--n-font)}
+
+/* never on the turned phone board, never in print */
+body.rot .dnav{display:none!important}
+@media print{ .dnav{display:none!important} }
+@media (prefers-reduced-motion:reduce){ .dnav-h,.dnav-p,.dnav-pv,.dnav-h i{transition:none!important} }

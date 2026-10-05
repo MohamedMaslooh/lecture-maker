@@ -1,0 +1,11 @@
+/* slide 04: a real sunset fills the stage; on click 1 it shrinks to the left (past step) and the
+   drawn explanation (noon path vs sunset path) fades up in the space it leaves */
+.s04 .s04-stage{position:relative;width:100%;height:440px;margin-top:24px}
+.s04 .s04-photo{position:absolute;inset:0}
+.s04 .s04-why{position:absolute;left:53%;right:0;top:0;bottom:0;display:flex;flex-direction:column;
+  justify-content:center;gap:20px}
+.s04 .s04-pane{margin:0;display:grid;grid-template-columns:290px 1fr;align-items:center;gap:20px}
+.s04 .s04-pane svg{display:block;width:290px;height:auto;border-radius:12px;box-shadow:var(--lift)}
+.s04 .s04-pane figcaption{font-size:17px;line-height:1.45;color:var(--muted)}
+.s04 .s04-pane figcaption b{display:block;color:var(--ink);font:700 19px/1.3 var(--disp)}
+.s04 .s04-photo img{object-position:50% 12%}

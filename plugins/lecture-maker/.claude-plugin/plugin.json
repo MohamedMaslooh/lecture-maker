@@ -1,0 +1,14 @@
+{
+  "name": "lecture-maker",
+  "displayName": "Lecture Maker",
+  "description": "Makes a whole lecture or presentation with you: asks what it needs, agrees the outline, fact-checks every claim, builds the slides with a team of agents and a fresh reviewer, and gives you one offline animated HTML file with a slide navigator.",
+  "version": "1.1.0",
+  "author": {
+    "name": "Dr. Mohamed Maslooh",
+    "url": "https://maslooh.com"
+  },
+  "homepage": "https://maslooh.com/skills/lecture-maker/",
+  "repository": "https://github.com/MohamedMaslooh/lecture-maker",
+  "license": "MIT",
+  "keywords": ["lecture", "presentation", "slides", "deck", "teaching", "html", "fact-check"]
+}

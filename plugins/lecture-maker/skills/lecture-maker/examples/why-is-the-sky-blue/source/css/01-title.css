@@ -1,0 +1,9 @@
+/* slide 01: the title over a drawn sky, from noon blue at the top to a sunset band at the horizon */
+.s01 .s01-sky{position:absolute;inset:0;
+  background:linear-gradient(180deg,#2E6CC9 0%,#6FA3E3 46%,#BBD3EE 70%,#F4C38E 88%,#E58A45 100%)}
+.s01 .s01-in{position:relative;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;
+  padding:0 76px 90px}
+.s01 h1{color:#fff;font-size:66px;text-shadow:0 2px 24px rgba(14,26,46,.25)}
+.s01 h1 em{color:#fff;border-bottom:5px solid rgba(255,255,255,.75)}
+.s01 .kick{color:rgba(255,255,255,.9)}
+.s01 .pnum{color:rgba(255,255,255,.8)}

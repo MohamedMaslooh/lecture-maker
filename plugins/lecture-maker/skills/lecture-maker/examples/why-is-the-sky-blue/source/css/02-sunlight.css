@@ -1,0 +1,12 @@
+/* slide 02: a prism; the fan of colours draws out on click 1 */
+.s02 .s02-stage{position:relative;width:100%;margin-top:22px}
+.s02 svg{display:block;width:100%;height:auto}
+.s02 .s02-lab{font:600 15px var(--sans);fill:var(--faint)}
+.s02 .s02-fan{clip-path:inset(0 100% 0 0);transition:clip-path .9s var(--e)}
+.s02.b1 .s02-fan{clip-path:inset(0 0 0 0)}
+.s02 .s02-names{position:absolute;right:-4px;top:8.6%;bottom:0;display:flex;flex-direction:column;
+  justify-content:space-between;height:86%;transform:translateX(100%);padding-left:12px}
+.s02 .s02-names span{font:600 13px/1 var(--disp);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.s02 .s02-stage{width:calc(100% - 80px)}
+.s02 .s02-line{margin-top:18px;font-size:22px;color:var(--soft)}
+.s02 .s02-line b{color:var(--ink)}
